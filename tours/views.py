@@ -4,7 +4,7 @@ import random
 from tours import data
 
 
-# Create your views here.
+# Create your views
 
 def main_view(request):
     random_title_hotels_dict = dict(random.sample(data.tours.items(), 6))
