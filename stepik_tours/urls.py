@@ -20,8 +20,6 @@ from tours.views import departure_view
 from tours.views import tour_view
 from tours.views import custom_handler404, custom_handler500
 
-
-
 urlpatterns = [
     path('', main_view),
     path('departure/<str:departure>', departure_view),
