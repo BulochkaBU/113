@@ -13,29 +13,26 @@ def main_view(request):
         'subtitle': data.subtitle,
         'description': data.description,
         'departures': data.departures,
-        'hotel_title': random_title_hotels_dict.values(),
-
+        'hotel_title': random_title_hotels_dict,
     })
 
 
 def departure_view(request, departure):
     dep = data.departures[departure]
-    tours = data.tours.values()
-    dep_tours, nights, prices = [], [], []
+    tours = data.tours
+    nights, prices = [], []
+    dep_tours = {}
     count_tour = 0
-
-    for tour in tours:
-        if tour['departure'] == departure:
-            dep_tours.append(tour)
-            nights.append(tour['nights'])
-            prices.append(tour['price'])
+    for key, value in tours.items():
+        if value['departure'] == departure:
+            dep_tours[key] = value
+            nights.append(value['nights'])
+            prices.append(value['price'])
             count_tour += 1
-
     min_nights = min(nights)
     max_nights = max(nights)
     min_price = min(prices)
     max_price = max(prices)
-
     return render(request, 'departure.html', context={
         'departure': dep,
         'dep_tours': dep_tours,
@@ -57,7 +54,6 @@ def tour_view(request, tour_id):
         'tour': tour,
         'tour_departure': tour_departure,
         'star': star,
-
     })
 
 

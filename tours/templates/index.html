@@ -8,22 +8,20 @@
       <p class="mt-5 w-50 mx-auto">{{ description }}</p>
     </section>
     <!-- CARDS -->
-
     <div class="row mt-5">
-      {% for hotel in hotel_title %}
+      {% for key,value in hotel_title.items %}
       <div class="col-4">
         <div class="card mb-4">
           <div class="embed-responsive embed-responsive-16by9">
-             <img class="card-img-top embed-responsive-item" src="{{ hotel.picture }}" alt="" />
+             <img class="card-img-top embed-responsive-item" src="{{ value.picture }}" alt="" />
           </div>
           <div class="card-body">
-            <h2 class="h5 card-title">{{hotel.title}}</h2>
-            <p class="card-text">{{ hotel.description}}</p>
-            <a href="#" class="btn btn-sm btn-primary">Подробнее</a>
+            <h2 class="h5 card-title">{{ value.title }}</h2>
+            <p class="card-text">{{ value.description}}</p>
+            <a href="/tour/{{key}}" class="btn btn-sm btn-primary">Подробнее</a>
           </div>
         </div>
       </div>{% endfor %}
     </div>
     </main>
-
 {% endblock %}
