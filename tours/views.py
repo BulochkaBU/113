@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseNotFound, HttpResponseServerError
+from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 import random
 from tours import data
 
@@ -13,29 +13,29 @@ def main_view(request):
         'subtitle': data.subtitle,
         'description': data.description,
         'departures': data.departures,
-        'hotel_title': random_title_hotels_dict,
+        'tours': random_title_hotels_dict,
     })
 
 
 def departure_view(request, departure):
-    dep = data.departures[departure]
+    departure_tour = data.departures[departure]
     tours = data.tours
     nights, prices = [], []
-    dep_tours = {}
+    departures_tours = {}
     count_tour = 0
-    for key, value in tours.items():
-        if value['departure'] == departure:
-            dep_tours[key] = value
-            nights.append(value['nights'])
-            prices.append(value['price'])
+    for tour_id, tour in tours.items():
+        if tour['departure'] == departure:
+            departures_tours[tour_id] = tour
+            nights.append(tour['nights'])
+            prices.append(tour['price'])
             count_tour += 1
     min_nights = min(nights)
     max_nights = max(nights)
     min_price = min(prices)
     max_price = max(prices)
     return render(request, 'departure.html', context={
-        'departure': dep,
-        'dep_tours': dep_tours,
+        'departure': departure_tour,
+        'departures_tours': departures_tours,
         'count_tour': count_tour,
         'min_nights': min_nights,
         'max_nights': max_nights,
@@ -45,7 +45,10 @@ def departure_view(request, departure):
 
 
 def tour_view(request, tour_id):
-    tour = data.tours[tour_id]
+    try:
+        tour = data.tours[tour_id]
+    except KeyError:
+        raise Http404
     tour_departure = data.departures[tour['departure']]
     stars = int(tour['stars'])
     for star in range(stars + 1):
